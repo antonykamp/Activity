@@ -1,5 +1,8 @@
 import { Checkbox, Container, Heading, List, ListItem } from "@chakra-ui/react"
 
+const ingridients = ["three Eggs", "1 Chicken", "Vegetables"]
+const methods = ["Stirr Eggs", "kill Chicken", "eat Chicken"]
+
 export default function Demo() {
   return (
     <Container>
@@ -7,23 +10,25 @@ export default function Demo() {
 
       <Heading size="md">Ingredients</Heading>
       <List>
-        <ListItem>
-          <Checkbox>Three Eggs</Checkbox>
-        </ListItem>
-        <ListItem>
-          <Checkbox>1 Chicken</Checkbox>
-        </ListItem>
+        {ingridients.map((el) => {
+          return (
+            <ListItem>
+              <Checkbox>{el}</Checkbox>
+            </ListItem>
+          )
+        })}
       </List>
 
       <Heading size="md">Method</Heading>
 
       <List>
-        <ListItem>
-          <Checkbox>Stirr Eggs</Checkbox>
-        </ListItem>
-        <ListItem>
-          <Checkbox>Make Chicken eat Frittata</Checkbox>
-        </ListItem>
+        {methods.map((method) => {
+          return (
+            <ListItem>
+              <Checkbox>{method}</Checkbox>
+            </ListItem>
+          )
+        })}
       </List>
     </Container>
   )

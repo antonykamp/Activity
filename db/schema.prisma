@@ -31,7 +31,6 @@ model User {
   ownedCircles Circle[] @relation("OwnedCircles")
   inCircles    Circle[] @relation("InCircles")
 
-  createdNotifications Notification[] @relation("CreatedNotification")
 }
 
 model Circle {
@@ -49,9 +48,6 @@ model Notification {
   id      Int      @id @default(autoincrement())
   content String
   sentAt  DateTime @default(now())
-
-  creator   User @relation("CreatedNotification", fields: [creatorId], references: [id])
-  creatorId Int
 
   sentTo   Circle @relation("SentNotifications", fields: [sentToId], references: [id])
   sentToId Int

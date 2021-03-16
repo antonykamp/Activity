@@ -16,13 +16,45 @@ model User {
   id             Int      @id @default(autoincrement())
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-  name           String?
+  displayName    String
+  username       String   @unique
   email          String   @unique
   hashedPassword String?
   role           String   @default("USER")
 
   tokens   Token[]
   sessions Session[]
+
+  contacts     User[] @relation("UserContacts")
+  inContactsOf User[] @relation("UserContacts")
+
+  ownedCircles Circle[] @relation("OwnedCircles")
+  inCircles    Circle[] @relation("InCircles")
+
+  createdNotifications Notification[] @relation("CreatedNotification")
+}
+
+model Circle {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  owner   User @relation("OwnedCircles", fields: [ownerId], references: [id])
+  ownerId Int
+
+  includedUsers User[]         @relation("InCircles")
+  notifications Notification[] @relation("SentNotifications")
+}
+
+model Notification {
+  id      Int      @id @default(autoincrement())
+  content String
+  sentAt  DateTime @default(now())
+
+  creator   User @relation("CreatedNotification", fields: [creatorId], references: [id])
+  creatorId Int
+
+  sentTo   Circle @relation("SentNotifications", fields: [sentToId], references: [id])
+  sentToId Int
 }
 
 model Session {

@@ -24,7 +24,21 @@ export default function Contacts() {
             return (
               <Tr valign="top">
                 <Td>
-                  <Avatar name={pair.owner.displayName} />
+                  <Tr>
+                    <Avatar name={pair.owner.displayName} />
+                  </Tr>
+                  <Tr>
+                    {pair.notifications.sentAt.toLocaleTimeString("en-GB", {
+                      hour: "numeric",
+                      minute: "numeric",
+                    })}
+                  </Tr>
+                  <Tr>
+                    {pair.notifications.sentAt.toLocaleDateString("en-GB", {
+                      month: "numeric",
+                      day: "numeric",
+                    })}
+                  </Tr>
                 </Td>
                 <Td> {pair.notifications.content}</Td>
               </Tr>

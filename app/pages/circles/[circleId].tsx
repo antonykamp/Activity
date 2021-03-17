@@ -13,15 +13,22 @@ import {
   Tr,
   Th,
   Td,
+  List,
+  ListItem,
 } from "@chakra-ui/react"
 import { ArrowRightIcon } from "@chakra-ui/icons"
 import getCircleUsers from "app/queries/getCircleUsers"
-import { useQuery } from "blitz"
+import { useQuery, useMutation } from "blitz"
 import { Form, FORM_ERROR } from "app/core/components/Form"
+import sendMessageMutation from "app/mutations/sendMessage"
+import getLatestMessage from "app/queries/getLatestMessage"
 
 export default function Circle() {
   const circleId = useParam("circleId", "number")
   const [circle] = useQuery(getCircleUsers, circleId!)
+  const [sendMessage] = useMutation(sendMessageMutation)
+  const [latestMessage] = useQuery(getLatestMessage, circleId!)
+
   return (
     <Container>
       <Container>
@@ -43,10 +50,20 @@ export default function Circle() {
           })}
         </Table>
       </Container>
-      <Center h="200px">
+      <Center h="100px">
         <Divider orientation="horizontal" />
       </Center>
       <Container>
+        <Center h="50px">
+          <Heading size="sm">Latest Updates ...</Heading>
+        </Center>
+        <Divider orientation="horizontal" />
+        <List>
+          <ListItem>
+            {latestMessage.sentAt.toLocaleDateString()}, {latestMessage.content}
+          </ListItem>
+        </List>
+
         <form
           onSubmit={(evt) => {
             evt.preventDefault()
@@ -54,7 +71,7 @@ export default function Circle() {
             const data = new FormData(target)
             const message = data.get("message")
             target.reset()
-            console.log(message)
+            sendMessage({ newMessageContent: message as string, circleId: circleId! })
           }}
         >
           <InputGroup>

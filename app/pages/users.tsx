@@ -16,7 +16,6 @@ import getUsernamesGlobal from "app/queries/getUsernamesGlobal"
 import addContact from "app/mutations/addContact"
 import { useQuery, useMutation } from "blitz"
 import { useState } from "react"
-
 export default function Users() {
   const [inputValue, setInputValue] = useState("")
 

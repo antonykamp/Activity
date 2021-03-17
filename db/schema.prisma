@@ -30,7 +30,6 @@ model User {
 
   ownedCircles Circle[] @relation("OwnedCircles")
   inCircles    Circle[] @relation("InCircles")
-
 }
 
 model Circle {

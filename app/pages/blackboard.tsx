@@ -1,29 +1,6 @@
-import {
-  Container,
-  IconButton,
-  Heading,
-  Input,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Box,
-  Avatar,
-  AvatarBadge,
-  AvatarGroup,
-  List,
-  ListItem,
-  ListIcon,
-  OrderedList,
-  UnorderedList,
-} from "@chakra-ui/react"
-import { AddIcon } from "@chakra-ui/icons"
+import { Container, Heading, Table, Tr, Td, Avatar } from "@chakra-ui/react"
 import getNotificationsOfUser from "app/queries/getNotificationsOfUser"
-import addContact from "app/mutations/addContact"
-import { useQuery, useMutation } from "blitz"
-import { useState } from "react"
+import { useQuery } from "blitz"
 
 export default function Contacts() {
   let [userNotifications] = useQuery(getNotificationsOfUser, null)

@@ -22,7 +22,7 @@ export const LoginForm = (props: LoginFormProps) => {
         onSubmit={async (values) => {
           try {
             await loginMutation(values)
-            props.onSuccess?.()
+            props.onSuccess?.() // eslint-disable-line
           } catch (error) {
             if (error instanceof AuthenticationError) {
               return { [FORM_ERROR]: "Sorry, those credentials are invalid" }

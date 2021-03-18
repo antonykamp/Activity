@@ -8,7 +8,9 @@
     "studio": "blitz prisma studio",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts,.tsx .",
     "test": "DATABASE_URL=\"file:./test.db.sqlite\" jest",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "prisma": {
     "schema": "db/schema.prisma"
@@ -48,7 +50,10 @@
   "devDependencies": {
     "@types/preview-email": "2.0.0",
     "@types/react": "17.0.3",
+    "cypress": "6.8.0",
     "eslint": "7.22.0",
+    "eslint-plugin-chai-friendly": "0.6.0",
+    "eslint-plugin-cypress": "2.11.2",
     "husky": "4.3.8",
     "lint-staged": "10.5.4",
     "prettier": "2.2.1",

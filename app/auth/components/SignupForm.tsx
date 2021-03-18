@@ -22,7 +22,7 @@ export const SignupForm = (props: SignupFormProps) => {
         onSubmit={async (values) => {
           try {
             await signupMutation(values)
-            props.onSuccess?.()
+            props.onSuccess?.() // eslint-disable-line
           } catch (error) {
             if (error.code === "P2002" && error.meta?.target?.includes("email")) {
               // This error comes from Prisma

@@ -1,4 +1,4 @@
-import { Container, Heading, Table, Tr, Td, Avatar } from "@chakra-ui/react"
+import { Container, Heading, Table, Tr, Td, Tbody, Avatar, Badge } from "@chakra-ui/react"
 import getNotificationsOfUser from "app/queries/getNotificationsOfUser"
 import { useQuery } from "blitz"
 
@@ -8,32 +8,32 @@ export default function Contacts() {
   return (
     <Container>
       <Heading>Blackboard</Heading>
-      <Table spacing={3}>
-        {userNotifications.map((notification) => {
-          return (
-            <Tr valign="top">
+
+      {userNotifications.map((notification) => {
+        return (
+          <Table size="sm">
+            <Tr verticalAlign="top">
               <Td>
-                <Tr>
-                  <Avatar name={notification.sentTo.owner.displayName} />
-                </Tr>
-                <Tr>
-                  {notification.sentAt.toLocaleTimeString("en-GB", {
-                    hour: "numeric",
-                    minute: "numeric",
-                  })}
-                </Tr>
-                <Tr>
-                  {notification.sentAt.toLocaleDateString("en-GB", {
-                    month: "numeric",
-                    day: "numeric",
-                  })}
-                </Tr>
+                <Avatar name={notification.sentTo.owner.displayName} />
               </Td>
-              <Td> {notification.content}</Td>
+              <Td>
+                {notification.sentAt.toLocaleDateString("en-GB", {
+                  month: "numeric",
+                  day: "numeric",
+                })}
+                {notification.sentAt.toLocaleTimeString("en-GB", {
+                  hour: "numeric",
+                  minute: "numeric",
+                })}
+              </Td>
+              <Td>
+                {notification.sentTo.owner.displayName} - {notification.sentTo.name}
+              </Td>
+              <Td>{notification.content}</Td>
             </Tr>
-          )
-        })}
-      </Table>
+          </Table>
+        )
+      })}
     </Container>
   )
 }

@@ -18,7 +18,7 @@ import {
   ListItem,
   HStack,
 } from "@chakra-ui/react"
-import { ArrowRightIcon, AddIcon } from "@chakra-ui/icons"
+import { ArrowRightIcon } from "@chakra-ui/icons"
 import getCircleUsers from "app/queries/getCircleUsers"
 import { useQuery, useMutation } from "blitz"
 import sendMessageMutation from "app/mutations/sendMessage"
@@ -26,7 +26,6 @@ import getLatestMessage from "app/queries/getLatestMessage"
 import getContactsOfUser from "app/queries/getContactsOfUser"
 import addToCircle from "app/mutations/addToCircle"
 import { ChangeEvent } from "react"
-import addContact from "app/mutations/addContact"
 
 export default function Circle() {
   async function addHandler(evt: ChangeEvent<HTMLSelectElement>) {
@@ -41,7 +40,6 @@ export default function Circle() {
   const [contacts] = useQuery(getContactsOfUser, null)
   const [addContact] = useMutation(addToCircle)
   const [latestMessages] = useQuery(getLatestMessage, circleId!)
-  let [updateContacts] = useMutation(addContact)
 
   return (
     <Container>
@@ -91,7 +89,7 @@ export default function Circle() {
         </Center>
         <Divider orientation="horizontal" />
         <List>
-          {latestMessages.map((message) => {
+          {latestMessages.reverse().map((message) => {
             return (
               <ListItem>
                 {message.sentAt.toLocaleDateString()}, {message.content}

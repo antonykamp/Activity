@@ -1,4 +1,3 @@
-import { NotFoundError } from "blitz"
 import db from "db"
 
 export default async function getLatestMessage(circleId: number) {
@@ -7,8 +6,5 @@ export default async function getLatestMessage(circleId: number) {
     select: { content: true, sentAt: true },
     orderBy: { sentAt: "desc" },
   })
-  if (!lastMessage) {
-    throw new NotFoundError()
-  }
   return lastMessage
 }

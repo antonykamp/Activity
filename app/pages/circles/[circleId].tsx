@@ -13,21 +13,33 @@ import {
   Tr,
   Th,
   Td,
+  Select,
   List,
   ListItem,
+  HStack,
 } from "@chakra-ui/react"
-import { ArrowRightIcon } from "@chakra-ui/icons"
+import { ArrowRightIcon, AddIcon } from "@chakra-ui/icons"
 import getCircleUsers from "app/queries/getCircleUsers"
 import { useQuery, useMutation } from "blitz"
-import { Form, FORM_ERROR } from "app/core/components/Form"
 import sendMessageMutation from "app/mutations/sendMessage"
 import getLatestMessage from "app/queries/getLatestMessage"
+import getContactsOfUser from "app/queries/getContactsOfUser"
+import addToCircle from "app/mutations/addToCircle"
+import { ChangeEvent } from "react"
 
 export default function Circle() {
+  async function addHandler(evt: ChangeEvent<HTMLSelectElement>) {
+    await addContact({ newContactId: Number(evt.target.value), circleId: circleId! })
+    evt.target.selectedIndex = undefined as any
+    circleExtras.refetch()
+  }
+
   const circleId = useParam("circleId", "number")
-  const [circle] = useQuery(getCircleUsers, circleId!)
+  const [circle, circleExtras] = useQuery(getCircleUsers, circleId!)
   const [sendMessage] = useMutation(sendMessageMutation)
   const [latestMessage] = useQuery(getLatestMessage, circleId!)
+  const [contacts] = useQuery(getContactsOfUser, null)
+  const [addContact] = useMutation(addToCircle)
 
   return (
     <Container>
@@ -48,6 +60,23 @@ export default function Circle() {
               </Tr>
             )
           })}
+          <Tr>
+            <Td>
+              <HStack>
+                <Select placeholder="Select Contact" variant="filled" onChange={addHandler}>
+                  {contacts
+                    .filter((contactA) => {
+                      return !circle.includedUsers.find((contactB) => {
+                        return contactB.id == contactA.id
+                      })
+                    })
+                    .map((contact) => {
+                      return <option value={contact.id}>{contact.username}</option>
+                    })}
+                </Select>
+              </HStack>
+            </Td>
+          </Tr>
         </Table>
       </Container>
       <Center h="100px">
@@ -60,7 +89,7 @@ export default function Circle() {
         <Divider orientation="horizontal" />
         <List>
           <ListItem>
-            {latestMessage.sentAt.toLocaleDateString()}, {latestMessage.content}
+            {/*{latestMessage.sentAt.toLocaleDateString()}, {latestMessage.content}*/}
           </ListItem>
         </List>
 

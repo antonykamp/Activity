@@ -16,18 +16,28 @@ import {
   List,
   ListItem,
 } from "@chakra-ui/react"
+import { AddIcon } from "@chakra-ui/icons"
 import { ArrowRightIcon } from "@chakra-ui/icons"
 import getCircleUsers from "app/queries/getCircleUsers"
 import { useQuery, useMutation } from "blitz"
-import { Form, FORM_ERROR } from "app/core/components/Form"
 import sendMessageMutation from "app/mutations/sendMessage"
 import getLatestMessage from "app/queries/getLatestMessage"
+import getContactsOfUser from "app/queries/getContactsOfUser"
+import addContact from "app/mutations/addContact"
 
 export default function Circle() {
   const circleId = useParam("circleId", "number")
   const [circle] = useQuery(getCircleUsers, circleId!)
   const [sendMessage] = useMutation(sendMessageMutation)
-  const [latestMessage] = useQuery(getLatestMessage, circleId!)
+  const [latestMessages] = useQuery(getLatestMessage, circleId!)
+
+  // async function addContactHandler() {
+  //   await updateContacts(userContacts!.id)
+  // }
+
+  let [updateContacts] = useMutation(addContact)
+
+  let [userContacts] = useQuery(getContactsOfUser, null)
 
   return (
     <Container>
@@ -48,8 +58,19 @@ export default function Circle() {
               </Tr>
             )
           })}
+          <Tr>
+            {/* <Td>
+              Add Contact
+              <IconButton
+                aria-label="Search database"
+                onClick={addContactHandler}
+                icon={<AddIcon />}
+              />
+            </Td> */}
+          </Tr>
         </Table>
       </Container>
+
       <Center h="100px">
         <Divider orientation="horizontal" />
       </Center>
@@ -59,9 +80,13 @@ export default function Circle() {
         </Center>
         <Divider orientation="horizontal" />
         <List>
-          <ListItem>
-            {latestMessage.sentAt.toLocaleDateString()}, {latestMessage.content}
-          </ListItem>
+          {latestMessages.map((message) => {
+            return (
+              <ListItem>
+                {message.sentAt.toLocaleDateString()}, {message.content}
+              </ListItem>
+            )
+          })}
         </List>
 
         <form
@@ -75,7 +100,11 @@ export default function Circle() {
           }}
         >
           <InputGroup>
-            <Input name="message" placeholder="Write a new Message to this Circle" />
+            <Input
+              name="message"
+              maxLength={140}
+              placeholder="Write a new Message to this Circle"
+            />
             <InputRightElement>
               <IconButton
                 type="submit"

@@ -64,7 +64,7 @@ export default function Contacts() {
             })}
           {searchGlobal &&
             searchResults.every((user) => {
-              return user.id != searchGlobal?.id
+              return user.id !== searchGlobal?.id
             }) && (
               <Tr>
                 <Td>{searchGlobal.displayName}</Td>

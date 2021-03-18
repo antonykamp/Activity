@@ -26,6 +26,7 @@ import getLatestMessage from "app/queries/getLatestMessage"
 import getContactsOfUser from "app/queries/getContactsOfUser"
 import addToCircle from "app/mutations/addToCircle"
 import { ChangeEvent } from "react"
+import addContact from "app/mutations/addContact"
 
 export default function Circle() {
   async function addHandler(evt: ChangeEvent<HTMLSelectElement>) {
@@ -37,9 +38,10 @@ export default function Circle() {
   const circleId = useParam("circleId", "number")
   const [circle, circleExtras] = useQuery(getCircleUsers, circleId!)
   const [sendMessage] = useMutation(sendMessageMutation)
-  const [latestMessage] = useQuery(getLatestMessage, circleId!)
   const [contacts] = useQuery(getContactsOfUser, null)
   const [addContact] = useMutation(addToCircle)
+  const [latestMessages] = useQuery(getLatestMessage, circleId!)
+  let [updateContacts] = useMutation(addContact)
 
   return (
     <Container>
@@ -79,6 +81,7 @@ export default function Circle() {
           </Tr>
         </Table>
       </Container>
+
       <Center h="100px">
         <Divider orientation="horizontal" />
       </Center>
@@ -88,9 +91,13 @@ export default function Circle() {
         </Center>
         <Divider orientation="horizontal" />
         <List>
-          <ListItem>
-            {/*{latestMessage.sentAt.toLocaleDateString()}, {latestMessage.content}*/}
-          </ListItem>
+          {latestMessages.map((message) => {
+            return (
+              <ListItem>
+                {message.sentAt.toLocaleDateString()}, {message.content}
+              </ListItem>
+            )
+          })}
         </List>
 
         <form
@@ -104,7 +111,11 @@ export default function Circle() {
           }}
         >
           <InputGroup>
-            <Input name="message" placeholder="Write a new Message to this Circle" />
+            <Input
+              name="message"
+              maxLength={140}
+              placeholder="Write a new Message to this Circle"
+            />
             <InputRightElement>
               <IconButton
                 type="submit"

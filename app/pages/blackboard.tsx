@@ -9,41 +9,30 @@ export default function Contacts() {
     <Container>
       <Heading>Blackboard</Heading>
       <Table spacing={3}>
-        {userNotifications
-          .map((notifiOwnerPair) => {
-            return notifiOwnerPair.notifications.map((notifi) => {
-              return { notifications: notifi, owner: notifiOwnerPair.owner }
-            })
-          })
-          .flat()
-          .sort(
-            (pairA, pairB) =>
-              pairB.notifications.sentAt.getTime() - pairA.notifications.sentAt.getTime()
+        {userNotifications.map((notification) => {
+          return (
+            <Tr valign="top">
+              <Td>
+                <Tr>
+                  <Avatar name={notification.sentTo.owner.displayName} />
+                </Tr>
+                <Tr>
+                  {notification.sentAt.toLocaleTimeString("en-GB", {
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                </Tr>
+                <Tr>
+                  {notification.sentAt.toLocaleDateString("en-GB", {
+                    month: "numeric",
+                    day: "numeric",
+                  })}
+                </Tr>
+              </Td>
+              <Td> {notification.content}</Td>
+            </Tr>
           )
-          .map((pair) => {
-            return (
-              <Tr valign="top">
-                <Td>
-                  <Tr>
-                    <Avatar name={pair.owner.displayName} />
-                  </Tr>
-                  <Tr>
-                    {pair.notifications.sentAt.toLocaleTimeString("en-GB", {
-                      hour: "numeric",
-                      minute: "numeric",
-                    })}
-                  </Tr>
-                  <Tr>
-                    {pair.notifications.sentAt.toLocaleDateString("en-GB", {
-                      month: "numeric",
-                      day: "numeric",
-                    })}
-                  </Tr>
-                </Td>
-                <Td> {pair.notifications.content}</Td>
-              </Tr>
-            )
-          })}
+        })}
       </Table>
     </Container>
   )
